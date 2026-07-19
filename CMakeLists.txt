@@ -38,6 +38,7 @@ juce_add_plugin("${PROJECT_NAME}"
     IS_MIDI_EFFECT FALSE
     EDITOR_WANTS_KEYBOARD_FOCUS FALSE
     VST3_CATEGORIES Fx Distortion Dynamics
+    LV2URI "https://carmycode.com/plugins/carmy-saturation"
     COPY_PLUGIN_AFTER_BUILD FALSE)
 
 ### C++ standard ###

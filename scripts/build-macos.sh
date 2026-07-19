@@ -12,7 +12,7 @@ cd "$PROJECT_DIR"
 echo "=== Generating Xcode project (Universal Binary) ==="
 cmake -B Build -G Xcode \
     -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
-    -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+    -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0
 
 echo "=== Building Release ==="
 cmake --build Build --config Release

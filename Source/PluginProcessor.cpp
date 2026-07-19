@@ -20,7 +20,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout CarmySaturationProcessor::cr
 {
     using FloatParam = juce::AudioParameterFloat;
 
-    APVTS::ParameterLayout layout;
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
 
     layout.add (std::make_unique<FloatParam> (
         juce::ParameterID { driveId, 1 }, "Drive",   pctRange, 0.0f));

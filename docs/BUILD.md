@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- **macOS 11.0+** (Big Sur or later) — Apple Silicon or Intel
+- **macOS 12.0+** (Monterey or later) — Apple Silicon or Intel
 - **Xcode 15+** — install from App Store or [developer.apple.com](https://developer.apple.com/)
 - **CMake 3.22+** — `brew install cmake` or from [cmake.org](https://cmake.org/)
 - **Git** — `brew install git` or Xcode Command Line Tools
@@ -17,7 +17,7 @@ cd carmy-saturation
 # Generate Xcode project (Universal Binary)
 cmake -B Build -G Xcode \
     -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
-    -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+    -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0
 
 # Build Release
 cmake --build Build --config Release
@@ -84,7 +84,7 @@ To build VST3 and Standalone only (skip AU, for faster iteration):
 ```bash
 cmake -B Build -G Xcode \
     -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
-    -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 \
+    -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
     -DJUCE_BUILD_AU=OFF
 cmake --build Build --config Release
 ```
