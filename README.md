@@ -1,4 +1,4 @@
-# 🥫 Carmy Saturation
+# 🐺 Carmy Saturation
 
 **Apple Silicon-native saturation/compression audio plugin** — VST3, AU, LV2, Standalone.
 
