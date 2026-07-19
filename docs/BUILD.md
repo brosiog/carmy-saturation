@@ -1,4 +1,4 @@
-# Building Fat Bastard for macOS
+# Building Carmy Saturation for macOS
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@
 ```bash
 # Clone
 git clone https://github.com/brosiog/fat-bastard.git
-cd fat-bastard
+cd carmy-saturation
 
 # Generate Xcode project (Universal Binary)
 cmake -B Build -G Xcode \
@@ -34,21 +34,21 @@ After building, the plugins are at:
 
 | Format  | Path |
 |---------|------|
-| **VST3** | `Build/FatBastard_artefacts/Release/VST3/Fat Bastard.vst3` |
-| **AU**   | `Build/FatBastard_artefacts/Release/AU/Fat Bastard.component` |
-| **Standalone** | `Build/FatBastard_artefacts/Release/Standalone/Fat Bastard.app` |
+| **VST3** | `Build/CarmySaturation_artefacts/Release/VST3/Carmy Saturation.vst3` |
+| **AU**   | `Build/CarmySaturation_artefacts/Release/AU/Carmy Saturation.component` |
+| **Standalone** | `Build/CarmySaturation_artefacts/Release/Standalone/Carmy Saturation.app` |
 
 ## Installing in Logic Pro X
 
 ### VST3 (Recommended)
 ```bash
-cp -r "Build/FatBastard_artefacts/Release/VST3/Fat Bastard.vst3" \
+cp -r "Build/CarmySaturation_artefacts/Release/VST3/Carmy Saturation.vst3" \
     ~/Library/Audio/Plug-Ins/VST3/
 ```
 
 ### Audio Unit (AU)
 ```bash
-cp -r "Build/FatBastard_artefacts/Release/AU/Fat Bastard.component" \
+cp -r "Build/CarmySaturation_artefacts/Release/AU/Carmy Saturation.component" \
     ~/Library/Audio/Plug-Ins/Components/
 ```
 
@@ -58,23 +58,23 @@ Apple's `auval` tool validates Audio Unit plugins:
 
 ```bash
 # List the plugin
-auval -a | grep -i "fat bastard"
+auval -a | grep -i "carmy saturation"
 
 # Run full validation
-auval -v aufx FbsT FatB
+auval -v aufx CmyC CrmS
 
 # If validation fails, check for code signing issues:
-codesign -dvvv "Build/FatBastard_artefacts/Release/AU/Fat Bastard.component"
+codesign -dvvv "Build/CarmySaturation_artefacts/Release/AU/Carmy Saturation.component"
 ```
 
 **Expected auval output:**
 ```
-auval 11802ms:  validating au fatba...
-FAT BASTARD 0.1.0 - Fat Bastard Audio
-  - manufacturer: FbsT
+auval 11802ms:  validating au crm...
+CARMY SATURATION 0.1.0 - CarmyCode
+  - manufacturer: CmyC
   - version: 0.1.0
   - AU type: aufx (Audio Effect)
-  - AU subtype: FatB
+  - AU subtype: CrmS
   - supported: ✓
 ```
 
@@ -98,25 +98,25 @@ For distribution outside your own Mac, you need Apple Developer ID signing and n
 ```bash
 codesign --force --sign "Developer ID Application: Your Name" \
     --deep --timestamp \
-    "Build/FatBastard_artefacts/Release/VST3/Fat Bastard.vst3"
+    "Build/CarmySaturation_artefacts/Release/VST3/Carmy Saturation.vst3"
 
 codesign --force --sign "Developer ID Application: Your Name" \
     --deep --timestamp \
-    "Build/FatBastard_artefacts/Release/AU/Fat Bastard.component"
+    "Build/CarmySaturation_artefacts/Release/AU/Carmy Saturation.component"
 ```
 
 ### 2. Package for Notarization
 
 ```bash
 ditto -c -k --keepParent \
-    "Build/FatBastard_artefacts/Release/VST3/Fat Bastard.vst3" \
-    /tmp/FatBastard-vst3.zip
+    "Build/CarmySaturation_artefacts/Release/VST3/Carmy Saturation.vst3" \
+    /tmp/CarmySaturation-vst3.zip
 ```
 
 ### 3. Submit for Notarization
 
 ```bash
-xcrun notarytool submit /tmp/FatBastard-vst3.zip \
+xcrun notarytool submit /tmp/CarmySaturation-vst3.zip \
     --apple-id "your@email.com" \
     --team-id "YOUR_TEAM_ID" \
     --password "@keychain:AC_PASSWORD"
@@ -126,7 +126,7 @@ xcrun notarytool submit /tmp/FatBastard-vst3.zip \
 
 ```bash
 xcrun stapler staple \
-    "Build/FatBastard_artefacts/Release/VST3/Fat Bastard.vst3"
+    "Build/CarmySaturation_artefacts/Release/VST3/Carmy Saturation.vst3"
 ```
 
 ## Building for Linux (DSP Development)
@@ -153,14 +153,14 @@ sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 
 ### AU validation fails
 - Ensure the plugin is code-signed (even ad-hoc):  
-  `codesign --force --deep --sign - "Fat Bastard.component"`
+  `codesign --force --deep --sign - "Carmy Saturation.component"`
 - Check Console.app for crash logs from `aureport`
-- Try: `auval -v aufx FbsT FatB -w` (wait for debugger, though this is for development)
+- `auval -v aufx CmyC CrmS -w` (wait for debugger, though this is for development)
 
 ### "Plugin not found" in Logic Pro X
 - Try rescan: Logic Pro X → Settings (⌘,) → Plug-in Manager → Rescan Selection
 - Check the plugin is in the correct folder
-- Verify architecture: `lipo -info "Fat Bastard.component/Contents/MacOS/Fat Bastard"` should show `x86_64 arm64`
+- Verify architecture: `lipo -info "Carmy Saturation.component/Contents/MacOS/Carmy Saturation"` should show `x86_64 arm64`
 
 ### Rosetta 2 sunset warning
 The Universal Binary means Intel Mac users can run the x86_64 slice. On Apple Silicon, the arm64 slice runs natively — no Rosetta 2 needed. This is the whole point of the project.
@@ -168,7 +168,7 @@ The Universal Binary means Intel Mac users can run the x86_64 slice. On Apple Si
 ## Project Structure
 
 ```
-fat-bastard/
+carmy-saturation/
 ├── CMakeLists.txt              # Build system
 ├── README.md                   # This file
 ├── docs/kanban.md              # Project kanban board

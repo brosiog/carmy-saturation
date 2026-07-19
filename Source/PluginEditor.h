@@ -6,17 +6,17 @@
 #include "PluginProcessor.h"
 #include "UI/KnobComponent.h"
 
-class FatBastardEditor : public juce::AudioProcessorEditor
+class CarmySaturationEditor : public juce::AudioProcessorEditor
 {
 public:
-    explicit FatBastardEditor (FatBastardProcessor&);
-    ~FatBastardEditor() override;
+    explicit CarmySaturationEditor (CarmySaturationProcessor&);
+    ~CarmySaturationEditor() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
 
 private:
-    FatBastardProcessor& processor;
+    CarmySaturationProcessor& processor;
 
     KnobComponent fatnessKnob;
     KnobComponent toneKnob;
@@ -25,5 +25,5 @@ private:
 
     juce::Label titleLabel;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FatBastardEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CarmySaturationEditor)
 };

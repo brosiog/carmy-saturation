@@ -15,5 +15,5 @@ cmake --build Build --config Release
 
 echo ""
 echo "✅ Build complete!"
-echo "   VST3: Build/FatBastard_artefacts/Release/VST3/"
-echo "   LV2:  Build/FatBastard_artefacts/Release/LV2/"
+echo "   VST3: Build/CarmySaturation_artefacts/Release/VST3/"
+echo "   LV2:  Build/CarmySaturation_artefacts/Release/LV2/"

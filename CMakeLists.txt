@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(FatBastard VERSION 0.1.0)
+project(CarmySaturation VERSION 0.1.0)
 
 ### JUCE version ###
 set(LIB_JUCE_TAG "8.0.12")
@@ -28,10 +28,10 @@ FetchContent_MakeAvailable(juce)
 ### Plugin target ###
 juce_add_plugin("${PROJECT_NAME}"
     FORMATS Standalone AU VST3 LV2
-    PRODUCT_NAME "Fat Bastard"
-    COMPANY_NAME "Fat Bastard Audio"
-    PLUGIN_MANUFACTURER_CODE FBst
-    PLUGIN_CODE FatB
+    PRODUCT_NAME "Carmy Saturation"
+    COMPANY_NAME "CarmyCode"
+    PLUGIN_MANUFACTURER_CODE CmyC
+    PLUGIN_CODE CrmS
     IS_SYNTH FALSE
     NEEDS_MIDI_INPUT FALSE
     NEEDS_MIDI_OUTPUT FALSE

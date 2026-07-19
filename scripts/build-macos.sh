@@ -19,7 +19,7 @@ cmake --build Build --config Release
 
 echo ""
 echo "✅ Build complete!"
-echo "   VST3: Build/FatBastard_artefacts/Release/VST3/"
-echo "   AU:   Build/FatBastard_artefacts/Release/AU/"
+echo "   VST3: Build/CarmySaturation_artefacts/Release/VST3/"
+echo "   AU:   Build/CarmySaturation_artefacts/Release/AU/"
 echo ""
 echo "To install, copy to ~/Library/Audio/Plug-Ins/VST3/ or /Library/Audio/Plug-Ins/VST3/"

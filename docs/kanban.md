@@ -1,4 +1,4 @@
-# 🐷 Fat Bastard — Project Kanban
+# 🥫 Carmy Saturation — Project Kanban
 
 > **Status:** Active ✅ | **Target:** macOS VST3/AU (Apple Silicon + Intel Universal Binary) + Linux VST3
 > **Stack:** JUCE 8 + CMake + C++17 | **Build:** Xcode (macOS), Unix Makefiles (Linux)

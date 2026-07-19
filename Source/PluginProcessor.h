@@ -7,11 +7,11 @@
 #include "DSP/CompressorStage.h"
 #include "DSP/TiltFilter.h"
 
-class FatBastardProcessor : public juce::AudioProcessor
+class CarmySaturationProcessor : public juce::AudioProcessor
 {
 public:
-    FatBastardProcessor();
-    ~FatBastardProcessor() override = default;
+    CarmySaturationProcessor();
+    ~CarmySaturationProcessor() override = default;
 
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
@@ -21,7 +21,7 @@ public:
     juce::AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override { return true; }
 
-    const juce::String getName() const override { return "Fat Bastard"; }
+    const juce::String getName() const override { return "Carmy Saturation"; }
     bool acceptsMidi() const override  { return false; }
     bool producesMidi() const override { return false; }
     bool isMidiEffect() const override { return false; }
@@ -58,5 +58,5 @@ private:
     std::atomic<float>* outputParam  { nullptr };
     std::atomic<float>* wetParam     { nullptr };
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FatBastardProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CarmySaturationProcessor)
 };

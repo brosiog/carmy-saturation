@@ -229,7 +229,7 @@ def test_dc_blocker():
 
 if __name__ == "__main__":
     print("=" * 55)
-    print("  🐷 Fat Bastard — DSP Algorithm Validation")
+    print("  🥫 Carmy Saturation — DSP Algorithm Validation")
     print("=" * 55)
 
     tests = [

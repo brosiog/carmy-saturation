@@ -1,6 +1,6 @@
 #include "PluginEditor.h"
 
-FatBastardEditor::FatBastardEditor (FatBastardProcessor& p)
+CarmySaturationEditor::CarmySaturationEditor (CarmySaturationProcessor& p)
     : AudioProcessorEditor (&p),
       processor (p),
       fatnessKnob (p.apvts, { processor.fatnessId, 1 }, "FATNESS"),
@@ -9,7 +9,7 @@ FatBastardEditor::FatBastardEditor (FatBastardProcessor& p)
       wetKnob     (p.apvts, { processor.wetId, 1 }, "WET")
 {
     // Title
-    titleLabel.setText ("FAT BASTARD", juce::dontSendNotification);
+    titleLabel.setText ("CARMY SATURATION", juce::dontSendNotification);
     titleLabel.setFont (juce::Font (24.0f, juce::Font::bold));
     titleLabel.setColour (juce::Label::textColourId, juce::Colours::crimson);
     titleLabel.setJustificationType (juce::Justification::centred);
@@ -25,11 +25,11 @@ FatBastardEditor::FatBastardEditor (FatBastardProcessor& p)
     setSize (500, 300);
 }
 
-FatBastardEditor::~FatBastardEditor()
+CarmySaturationEditor::~CarmySaturationEditor()
 {
 }
 
-void FatBastardEditor::paint (juce::Graphics& g)
+void CarmySaturationEditor::paint (juce::Graphics& g)
 {
     g.fillAll (juce::Colour (0xFF1a1a1a));
 
@@ -38,7 +38,7 @@ void FatBastardEditor::paint (juce::Graphics& g)
     g.drawHorizontalLine (32, 50, getWidth() - 50);
 }
 
-void FatBastardEditor::resized()
+void CarmySaturationEditor::resized()
 {
     auto area = getLocalBounds().reduced (20);
 

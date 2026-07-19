@@ -8,7 +8,7 @@ namespace
     auto dbRange  = juce::NormalisableRange<float> (-24.0f, 24.0f, 0.01f);
 }
 
-FatBastardProcessor::FatBastardProcessor()
+CarmySaturationProcessor::CarmySaturationProcessor()
     : AudioProcessor (BusesProperties()
         .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
         .withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
@@ -16,7 +16,7 @@ FatBastardProcessor::FatBastardProcessor()
 {
 }
 
-juce::AudioProcessorValueTreeState::ParameterLayout FatBastardProcessor::createLayout()
+juce::AudioProcessorValueTreeState::ParameterLayout CarmySaturationProcessor::createLayout()
 {
     using FloatParam = juce::AudioParameterFloat;
 
@@ -37,7 +37,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout FatBastardProcessor::createL
     return layout;
 }
 
-void FatBastardProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void CarmySaturationProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     juce::dsp::ProcessSpec spec;
     spec.sampleRate       = sampleRate;
@@ -65,7 +65,7 @@ void FatBastardProcessor::releaseResources()
 {
 }
 
-bool FatBastardProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool CarmySaturationProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
     const auto& mainOut = layouts.getMainOutputChannelSet();
     if (mainOut != juce::AudioChannelSet::mono() && mainOut != juce::AudioChannelSet::stereo())
@@ -74,7 +74,7 @@ bool FatBastardProcessor::isBusesLayoutSupported (const BusesLayout& layouts) co
     return mainOut == layouts.getMainInputChannelSet();
 }
 
-void FatBastardProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
+void CarmySaturationProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
     juce::ScopedNoDenormals noDenormals;
 
@@ -128,19 +128,19 @@ void FatBastardProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
     }
 }
 
-juce::AudioProcessorEditor* FatBastardProcessor::createEditor()
+juce::AudioProcessorEditor* CarmySaturationProcessor::createEditor()
 {
-    return new FatBastardEditor (*this);
+    return new CarmySaturationEditor (*this);
 }
 
-void FatBastardProcessor::getStateInformation (juce::MemoryBlock& destData)
+void CarmySaturationProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     if (auto state = apvts.copyState(); state.isValid())
         if (auto xml = state.createXml())
             copyXmlToBinary (*xml, destData);
 }
 
-void FatBastardProcessor::setStateInformation (const void* data, int sizeInBytes)
+void CarmySaturationProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     if (auto xml = getXmlFromBinary (data, sizeInBytes))
         if (xml->hasTagName (apvts.state.getType()))
@@ -149,5 +149,5 @@ void FatBastardProcessor::setStateInformation (const void* data, int sizeInBytes
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new FatBastardProcessor();
+    return new CarmySaturationProcessor();
 }
