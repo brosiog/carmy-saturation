@@ -3,6 +3,7 @@
 void SaturationStage::prepare (const juce::dsp::ProcessSpec& spec)
 {
     dcBlockers.assign (spec.numChannels, {});
+    dcCoeff = std::exp (-2.0 * M_PI * 10.0 / spec.sampleRate);
     reset();
 }
 
@@ -28,8 +29,7 @@ void SaturationStage::process (const juce::dsp::ProcessContextReplacing<float>& 
     const auto numChannels = block.getNumChannels();
     const auto numSamples  = block.getNumSamples();
 
-    if (dcBlockers.size() < numChannels)
-        dcBlockers.resize (numChannels);
+    jassert (dcBlockers.size() >= numChannels);
 
     constexpr float smoothing = 0.995f;
 
@@ -43,7 +43,7 @@ void SaturationStage::process (const juce::dsp::ProcessContextReplacing<float>& 
             float x       = block.getSample ((int) ch, (int) s);
             float driven  = x * currentDriveGain;
             float clipped = std::tanh (driven);
-            float blocked = dcBlockers[ch].process (clipped);
+            float blocked = dcBlockers[ch].process (clipped, dcCoeff);
             block.setSample ((int) ch, (int) s, blocked * currentMakeupGain);
         }
     }

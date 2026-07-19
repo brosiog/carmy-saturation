@@ -8,21 +8,29 @@
 
 ## 🔀 Active Workstreams
 
-This project currently has **two concurrent agents** working on the adversarial review fixes. Each has its own branch to avoid conflict:
+This project's two-track adversarial review branches have been merged back into `feat/core-dsp-implementation`:
 
-| Agent | Branch | Worktree | Status |
-|-------|--------|----------|--------|
-| **CarmyGPT** (me) | `fix/adversarial-carmycode` | In-repo (main checkout) | ✅ Done, unmerged |
-| **Kanban agent** | `fix/adversarial-kanban` | `../carmy-saturation-kanban/` | ⏳ In progress |
+| Fix | Status |
+|-----|--------|
+| Adversarial review fixes (P0-P2) | ✅ Merged via cherry-pick from `fix/adversarial-kanban` |
+| macOS 27 beta compatibility | ✅ Applied on `feat/core-dsp-implementation` |
 
-### How to merge
-1. Both agents finish their branches
-2. Compare diffs: `git diff fix/adversarial-carmycode..fix/adversarial-kanban`
-3. Pick the best version of each fix (or merge both with priority on authored quality)
-4. Merge to main, delete both branches and the worktree
-5. Remove worktree: `git worktree remove ../carmy-saturation-kanban`
+> Branches `fix/adversarial-carmycode` and `fix/adversarial-kanban` can be deleted.
+> Worktree `../carmy-saturation-kanban/` can be removed.
 
 ---
+
+## ✅ Done
+
+### Phase 6: Adversarial Review Fixes 🛠️
+- [x] All P0-P2 fixes merged (RT safety, DC blocker SR calc, dry buffer pre-alloc, wet crossfade, tone cache)
+
+### Phase 7: macOS 27 Beta Compatibility 🔧
+- [x] Deployment target 11.0 → 12.0
+- [x] `juce::dsp::SmoothedValue` → `juce::SmoothedValue` (JUCE 8 namespace change)
+- [x] `APVTS::ParameterLayout` → full qualified type
+- [x] Added missing `#include <juce_audio_processors>` in KnobComponent.h
+- [x] Added LV2URI to CMakeLists.txt (JUCE 8 requires scheme prefix)
 
 ## 📋 Backlog (Future)
 

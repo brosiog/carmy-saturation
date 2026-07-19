@@ -15,6 +15,7 @@ public:
 private:
     float currentDriveGain  { 1.0f };
     float currentMakeupGain { 1.0f };
+    float dcCoeff { 0.995f };
 
     float targetDriveGain   { 1.0f };
     float targetMakeupGain  { 1.0f };
@@ -26,9 +27,9 @@ private:
         float x1 { 0.0f };
         float y1 { 0.0f };
 
-        float process (float x) noexcept
+        float process (float x, float coeff) noexcept
         {
-            const float y = x - x1 + 0.995f * y1;
+            const float y = x - x1 + coeff * y1;
             x1 = x;
             y1 = y;
             return y;
