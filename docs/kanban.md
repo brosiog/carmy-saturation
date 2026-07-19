@@ -6,6 +6,24 @@
 
 ---
 
+## 🔀 Active Workstreams
+
+This project currently has **two concurrent agents** working on the adversarial review fixes. Each has its own branch to avoid conflict:
+
+| Agent | Branch | Worktree | Status |
+|-------|--------|----------|--------|
+| **CarmyGPT** (me) | `fix/adversarial-carmycode` | In-repo (main checkout) | ✅ Done, unmerged |
+| **Kanban agent** | `fix/adversarial-kanban` | `../carmy-saturation-kanban/` | ⏳ In progress |
+
+### How to merge
+1. Both agents finish their branches
+2. Compare diffs: `git diff fix/adversarial-carmycode..fix/adversarial-kanban`
+3. Pick the best version of each fix (or merge both with priority on authored quality)
+4. Merge to main, delete both branches and the worktree
+5. Remove worktree: `git worktree remove ../carmy-saturation-kanban`
+
+---
+
 ## 📋 Backlog (Future)
 
 - [ ] **DSP: Pre/Post EQ** — High-pass filter at input for DC/subsonic removal
@@ -43,6 +61,23 @@
 - [x] **Python DSP tests** — 4/4 passing: tanh waveshaper (linearity, clipping, harmonics), DC blocker (DC removal, audio pass), envelope follower (tracking, decay), shelf filter math (boost/cut direction)
 - [x] **Code review** — All DSP modules reviewed against reference implementations (Glizzyizer, ChowDSP patterns)
 - [x] **Git repo** — Pushed to github.com/brosiog/fat-bastard
+
+### Phase 6: Adversarial Review Fixes 🛠️
+
+**Branch: `fix/adversarial-carmycode` (CarmyGPT)**
+
+The adversarial review found 11 issues (1×P0, 3×P1, 7×P2). All were fixed on CarmyGPT's branch:
+
+- [x] **P0: Build blocker** — `FatBastardProcessor::releaseResources()` → `CarmySaturationProcessor` (linker error from rename)
+- [x] **P1: No RT allocation** — `dryBuffer` pre-allocated in `prepareToPlay()`, `copyFrom()` instead of `makeCopyOf()`
+- [x] **P1: Wet crossfade** — `SmoothedValue` with 20ms ramp on wet/dry mix (eliminates clicks)
+- [x] **P1: Sample-rate DC blocker** — Coefficient computed from sample rate instead of hardcoded 0.995
+- [x] **P2: No resize on audio thread** — Replaced `dcBlockers.resize()` with `jassert` in `process()`
+- [x] **P2: Tilt coeff cache** — Skip `updateCoefficients()` when tone hasn't changed
+
+**Branch: `fix/adversarial-kanban` (Kanban agent)**
+
+- [ ] **(same tasks — agent resolves independently)**
 
 ---
 

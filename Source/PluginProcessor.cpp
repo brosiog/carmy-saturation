@@ -61,7 +61,7 @@ void CarmySaturationProcessor::prepareToPlay (double sampleRate, int samplesPerB
     wetParam     = apvts.getRawParameterValue (wetId);
 }
 
-void FatBastardProcessor::releaseResources()
+void CarmySaturationProcessor::releaseResources()
 {
 }
 
