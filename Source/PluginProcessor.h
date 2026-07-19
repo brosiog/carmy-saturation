@@ -38,10 +38,10 @@ public:
 
     juce::AudioProcessorValueTreeState apvts;
 
-    static constexpr auto fatnessId = "fatness";
-    static constexpr auto toneId    = "tone";
-    static constexpr auto outputId  = "output";
-    static constexpr auto wetId     = "wet";
+    static constexpr auto driveId  = "drive";
+    static constexpr auto toneId   = "tone";
+    static constexpr auto outputId = "output";
+    static constexpr auto wetId    = "wet";
 
 private:
     static juce::AudioProcessorValueTreeState::ParameterLayout createLayout();
@@ -53,10 +53,10 @@ private:
     juce::dsp::Gain<float> preGain;
     juce::dsp::Gain<float> outputGain;
 
-    std::atomic<float>* fatnessParam { nullptr };
-    std::atomic<float>* toneParam    { nullptr };
-    std::atomic<float>* outputParam  { nullptr };
-    std::atomic<float>* wetParam     { nullptr };
+    std::atomic<float>* driveParam  { nullptr };
+    std::atomic<float>* toneParam   { nullptr };
+    std::atomic<float>* outputParam { nullptr };
+    std::atomic<float>* wetParam    { nullptr };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CarmySaturationProcessor)
 };

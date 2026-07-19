@@ -23,7 +23,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout CarmySaturationProcessor::cr
     APVTS::ParameterLayout layout;
 
     layout.add (std::make_unique<FloatParam> (
-        juce::ParameterID { fatnessId, 1 }, "Fatness",   pctRange, 0.0f));
+        juce::ParameterID { driveId, 1 }, "Drive",   pctRange, 0.0f));
 
     layout.add (std::make_unique<FloatParam> (
         juce::ParameterID { toneId, 1 }, "Tone", biRange, 0.0f));
@@ -55,7 +55,7 @@ void CarmySaturationProcessor::prepareToPlay (double sampleRate, int samplesPerB
     outputGain.setRampDurationSeconds (0.02);
 
     // Cache parameter pointers for realtime-safe access
-    fatnessParam = apvts.getRawParameterValue (fatnessId);
+    driveParam = apvts.getRawParameterValue (driveId);
     toneParam    = apvts.getRawParameterValue (toneId);
     outputParam  = apvts.getRawParameterValue (outputId);
     wetParam     = apvts.getRawParameterValue (wetId);
@@ -85,7 +85,7 @@ void CarmySaturationProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         buffer.clear (ch, 0, buffer.getNumSamples());
 
     // Read parameters (realtime-safe from atomic pointers)
-    const float fatness01 = fatnessParam->load() * 0.01f;
+    const float drive01 = driveParam->load() * 0.01f;
     const float tone11    = toneParam->load() * 0.01f;
     const float outputDb  = outputParam->load();
     const float wetPct    = wetParam->load() * 0.01f;
@@ -98,8 +98,8 @@ void CarmySaturationProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     }
 
     // Set DSP parameters
-    saturation.setGirth (fatness01);
-    compressor.setAmount (fatness01);
+    saturation.setGirth (drive01);
+    compressor.setAmount (drive01);
     tiltFilter.setTone (tone11);
     outputGain.setGainDecibels (outputDb);
 

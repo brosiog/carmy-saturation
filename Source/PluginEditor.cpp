@@ -3,7 +3,7 @@
 CarmySaturationEditor::CarmySaturationEditor (CarmySaturationProcessor& p)
     : AudioProcessorEditor (&p),
       processor (p),
-      fatnessKnob (p.apvts, { processor.fatnessId, 1 }, "FATNESS"),
+      driveKnob (p.apvts, { processor.driveId, 1 }, "DRIVE"),
       toneKnob    (p.apvts, { processor.toneId, 1 }, "TONE"),
       outputKnob  (p.apvts, { processor.outputId, 1 }, "OUTPUT"),
       wetKnob     (p.apvts, { processor.wetId, 1 }, "WET")
@@ -16,7 +16,7 @@ CarmySaturationEditor::CarmySaturationEditor (CarmySaturationProcessor& p)
     addAndMakeVisible (titleLabel);
 
     // Knobs
-    addAndMakeVisible (fatnessKnob);
+    addAndMakeVisible (driveKnob);
     addAndMakeVisible (toneKnob);
     addAndMakeVisible (outputKnob);
     addAndMakeVisible (wetKnob);
@@ -49,7 +49,7 @@ void CarmySaturationEditor::resized()
     auto knobArea = area.reduced (10, 20);
     auto knobWidth = knobArea.getWidth() / 4;
 
-    fatnessKnob.setBounds (knobArea.removeFromLeft (knobWidth).reduced (6));
+    driveKnob.setBounds (knobArea.removeFromLeft (knobWidth).reduced (6));
     toneKnob.setBounds    (knobArea.removeFromLeft (knobWidth).reduced (6));
     outputKnob.setBounds  (knobArea.removeFromLeft (knobWidth).reduced (6));
     wetKnob.setBounds     (knobArea.reduced (6));

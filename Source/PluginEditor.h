@@ -18,7 +18,7 @@ public:
 private:
     CarmySaturationProcessor& processor;
 
-    KnobComponent fatnessKnob;
+    KnobComponent driveKnob;
     KnobComponent toneKnob;
     KnobComponent outputKnob;
     KnobComponent wetKnob;
