@@ -54,6 +54,10 @@ void CarmySaturationProcessor::prepareToPlay (double sampleRate, int samplesPerB
     outputGain.prepare (spec);
     outputGain.setRampDurationSeconds (0.02);
 
+    dryBuffer.setSize (getTotalNumOutputChannels(), samplesPerBlock);
+    smoothedWet.reset (sampleRate, 0.02);
+    smoothedWet.setCurrentAndTargetValue (1.0f);
+
     // Cache parameter pointers for realtime-safe access
     driveParam = apvts.getRawParameterValue (driveId);
     toneParam    = apvts.getRawParameterValue (toneId);
@@ -90,11 +94,11 @@ void CarmySaturationProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     const float outputDb  = outputParam->load();
     const float wetPct    = wetParam->load() * 0.01f;
 
-    // Dry buffer for wet/dry mix
-    juce::AudioBuffer<float> dryBuffer;
+    // Dry buffer for wet/dry mix — pre-allocated in prepareToPlay for RT safety
     if (wetPct < 1.0f)
     {
-        dryBuffer.makeCopyOf (buffer);
+        for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
+            dryBuffer.copyFrom (ch, 0, buffer, ch, 0, buffer.getNumSamples());
     }
 
     // Set DSP parameters
@@ -112,9 +116,10 @@ void CarmySaturationProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     tiltFilter.process (ctx);
     outputGain.process (ctx);
 
-    // Wet/dry mix
+    // Wet/dry mix with smooth crossfade
     if (wetPct < 1.0f)
     {
+        smoothedWet.setTargetValue (wetPct);
         const auto numSamples = buffer.getNumSamples();
         for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
         {
@@ -122,7 +127,8 @@ void CarmySaturationProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
             auto* dry = dryBuffer.getReadPointer (ch);
             for (int s = 0; s < numSamples; ++s)
             {
-                wet[s] = wetPct * wet[s] + (1.0f - wetPct) * dry[s];
+                float w = smoothedWet.getNextValue();
+                wet[s] = w * wet[s] + (1.0f - w) * dry[s];
             }
         }
     }

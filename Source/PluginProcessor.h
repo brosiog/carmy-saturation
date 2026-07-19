@@ -53,6 +53,9 @@ private:
     juce::dsp::Gain<float> preGain;
     juce::dsp::Gain<float> outputGain;
 
+    juce::AudioBuffer<float> dryBuffer;
+    juce::dsp::SmoothedValue<float> smoothedWet;
+
     std::atomic<float>* driveParam  { nullptr };
     std::atomic<float>* toneParam   { nullptr };
     std::atomic<float>* outputParam { nullptr };

@@ -12,6 +12,7 @@ void TiltFilter::prepare (const juce::dsp::ProcessSpec& spec)
     // but long enough to eliminate audible zippering
     smoothedTone.reset (spec.sampleRate, 0.02);
     smoothedTone.setCurrentAndTargetValue (0.0f);
+    lastTone = 0.0f;
 
     updateCoefficients (0.0f);
 }
@@ -86,8 +87,13 @@ void TiltFilter::process (const juce::dsp::ProcessContextReplacing<float>& conte
     }
     else
     {
-        // No smoothing active — process the entire block with current coefficients
-        updateCoefficients (smoothedTone.getCurrentValue());
+        // Only recalc coefficients if tone has changed
+        float currentTone = smoothedTone.getCurrentValue();
+        if (currentTone != lastTone)
+        {
+            updateCoefficients (currentTone);
+            lastTone = currentTone;
+        }
         lowShelf.process (context);
         highShelf.process (context);
     }

@@ -46,6 +46,7 @@ private:
 
     // Smoothed tone value to prevent zippering on coefficient changes
     juce::dsp::SmoothedValue<float, juce::ValueSmoothingTypes::Linear> smoothedTone;
+    float lastTone { 0.0f };
 
     //==============================================================================
     static constexpr float lowFreq  = 250.0f;
