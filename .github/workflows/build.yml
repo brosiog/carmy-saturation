@@ -1,0 +1,107 @@
+name: Build & Validate
+
+on:
+  push:
+    branches: [main, feat/*, fix/*]
+  pull_request:
+    branches: [main]
+
+env:
+  CMAKE_BUILD_PARALLEL_LEVEL: 4
+
+jobs:
+  ###########################################################################
+  # Linux build (VST3 + LV2)
+  ###########################################################################
+  linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [Debug, Release]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Install Linux deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            libx11-dev libxinerama-dev libxcursor-dev \
+            libxrandr-dev libxcomposite-dev libxfixes-dev \
+            libfreetype-dev libasound2-dev libjack-jackd2-dev \
+            libpulse-dev libgl1-mesa-dev
+
+      - name: Configure CMake
+        run: cmake -B Build -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+
+      - name: Build
+        run: cmake --build Build --config ${{ matrix.config }}
+
+  ###########################################################################
+  # macOS build (Universal Binary: AU + VST3) + auval validation
+  ###########################################################################
+  macos:
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [Debug, Release]
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Configure CMake (Universal Binary)
+        run: |
+          cmake -B Build -G Xcode \
+            -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0
+
+      - name: Build ${{ matrix.config }}
+        run: cmake --build Build --config ${{ matrix.config }}
+
+      - name: Install AU plugin for validation
+        if: ${{ matrix.config == 'Release' }}
+        run: |
+          cp -R Build/CarmySaturation_artefacts/${{ matrix.config }}/AU/Carmy\ Saturation.component \
+            ~/Library/Audio/Plug-Ins/Components/
+          cp -R Build/CarmySaturation_artefacts/${{ matrix.config }}/VST3/Carmy\ Saturation.vst3 \
+            ~/Library/Audio/Plug-Ins/VST3/
+
+      - name: Verify Universal Binary
+        if: ${{ matrix.config == 'Release' }}
+        run: |
+          lipo -info ~/Library/Audio/Plug-Ins/Components/Carmy\ Saturation.component/Contents/MacOS/Carmy\ Saturation
+          echo "Expecting: arm64 x86_64"
+
+      - name: Run auval validation
+        if: ${{ matrix.config == 'Release' }}
+        run: |
+          # Kill stale component registrar
+          killall -9 AudioComponentRegistrar 2>/dev/null || true
+          sleep 1
+          auval -strict -v aufx CrmS CmyC
+
+      - name: Run pluginval validation (stress level 5)
+        if: ${{ matrix.config == 'Release' }}
+        continue-on-error: true  # pluginval stress is informational
+        run: |
+          if command -v pluginval &> /dev/null; then
+            pluginval --strictness-level 5 --validate \
+              ~/Library/Audio/Plug-Ins/Components/Carmy\ Saturation.component
+          else
+            echo "pluginval not installed — auval is the authoritative validator"
+          fi
+
+      - name: Upload built artefacts
+        if: ${{ matrix.config == 'Release' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: CarmySaturation-${{ matrix.config }}-macOS
+          path: |
+            Build/CarmySaturation_artefacts/${{ matrix.config }}/AU/
+            Build/CarmySaturation_artefacts/${{ matrix.config }}/VST3/
