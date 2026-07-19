@@ -1,44 +1,61 @@
 # 🐷 Fat Bastard
 
-A saturation/compression audio plugin inspired by Dada Life's Sausage Fattener, rebuilt from scratch with JUCE for Apple Silicon native compatibility (VST3/AU for macOS, VST3 for Linux).
+A saturation/compression audio plugin inspired by Dada Life's Sausage Fattener, rebuilt from scratch with JUCE for **Apple Silicon native** compatibility.
 
-## Why
-
-Sausage Fattener by Tailored Noise/Dada Life used PPC/Intel code that relied on Rosetta 2 translation on Apple Silicon Macs. With Rosetta 2 being sunset by Apple, the original plugin has no upgrade path. Fat Bastard is a modern, Apple Silicon-native replacement with the same spirit: one knob to make things **fat**.
+> **Why:** The original Sausage Fattener used PPC/Intel code that relied on Rosetta 2 on Apple Silicon Macs. With Rosetta 2 being sunset, Fat Bastard is a modern, arm64-native replacement. One knob to make things **fat**.
 
 ## DSP Chain
 
 ```
-Input → Pre-Gain → Saturation (tanh waveshaper) → Compressor (envelope follower) → Tilt EQ → Output Gain → Dry/Wet Mix
+Input → Tanh Waveshaper → DC Blocker → Compressor → Tilt EQ → Output → Dry/Wet
 ```
 
-## Controls (MVP)
+## Controls
 
-| Control   | Range     | What it does                                              |
-|-----------|-----------|-----------------------------------------------------------|
-| FATNESS   | 0–100%    | Drives saturation + compression amount (the main event)   |
-| TONE      | -100–+100 | Tilt EQ — dark (-100) ↔ bright (+100), 0 = flat           |
-| OUTPUT    | -24–+24 dB| Master output level                                       |
-| WET       | 0–100%    | Dry/wet mix for parallel processing                       |
+| Control   | Range       | What it does                                          |
+|-----------|-------------|-------------------------------------------------------|
+| FATNESS   | 0–100%      | Drives saturation + compression amount (the main event)|
+| TONE      | -100–+100   | Tilt EQ — dark (-) ↔ bright (+), 0 = flat             |
+| OUTPUT    | -24–+24 dB  | Master output level                                   |
+| WET       | 0–100%      | Dry/wet mix for parallel processing                   |
 
-## Build
-
-### macOS (target)
+## Build (macOS)
 
 ```bash
-cmake -B Build -G Xcode \
-  -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
-  -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
-cmake --build Build --config Release
+git clone https://github.com/brosiog/fat-bastard.git
+cd fat-bastard
+./scripts/build-macos.sh
 ```
 
-The built VST3 will be at `Build/FatBastard_artefacts/Release/VST3/`.
+Output: `Build/FatBastard_artefacts/Release/VST3/Fat Bastard.vst3`
 
-### Linux (dev/test)
+See [docs/BUILD.md](docs/BUILD.md) for detailed macOS build, install, signing, and notarization instructions.
 
-```bash
-cmake -B Build -G "Unix Makefiles"
-cmake --build Build --config Release
+## Project Status
+
+| Area | Status |
+|------|--------|
+| DSP algorithms | ✅ Tested (4/4 Python tests pass) |
+| Plugin structure | ✅ Complete (Processor + Editor + DSP modules) |
+| macOS build | 🔧 Needs macOS (Xcode) — code is ready |
+| CI pipeline | 📄 Written but needs workflow-scoped token |
+| Presets | ❌ Not yet |
+| Slick UI | ❌ MVP only |
+
+See [docs/kanban.md](docs/kanban.md) for the full project board.
+
+## File Structure
+
+```
+Source/
+├── PluginProcessor.h/.cpp   # Audio processor + DSP chain
+├── PluginEditor.h/.cpp      # UI editor
+├── DSP/
+│   ├── SaturationStage      # Tanh waveshaper + DC blocker
+│   ├── CompressorStage      # RMS envelope follower + VCA
+│   └── TiltFilter           # Tilt EQ (low/high shelves)
+└── UI/
+    └── KnobComponent        # Reusable rotary knob
 ```
 
 ## License
