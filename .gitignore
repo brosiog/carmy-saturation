@@ -1,0 +1,24 @@
+# Build
+Build/
+Libs/
+
+# IDE
+*.xcodeproj
+*.xcworkspace
+.vscode/
+.idea/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Compiled
+*.o
+*.obj
+*.exe
+
+# Packages
+*.deb
+*.rpm
